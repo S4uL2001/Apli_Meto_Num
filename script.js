@@ -12,9 +12,6 @@ function fmt(value, digits = 6) {
   });
 }
 
-// ==========================================
-// MÉTODOS NUMÉRICOS EN JAVASCRIPT
-// ==========================================
 function trapz(y, h) {
   let sum = 0;
   for (let i = 1; i < y.length - 1; i++) sum += y[i];
@@ -156,7 +153,7 @@ function run22() {
       let xi = x0 + i * h;
       x_arr.push(xi);
       y_arr.push(a * Math.cosh(xi / a));
-      f_arr.push(Math.cosh(xi / a)); // integrando
+      f_arr.push(Math.cosh(xi / a));
     }
 
     const trap = trapz(f_arr, h);
@@ -219,7 +216,6 @@ function run24() {
       let yi = 2*b*Math.sin(ti) - b*Math.sin(2*ti);
       x_arr.push(xi);
       y_arr.push(yi);
-      // Derivadas
       let dx = -2*b*Math.sin(ti) + 2*b*Math.sin(2*ti);
       let dy = 2*b*Math.cos(ti) - 2*b*Math.cos(2*ti);
       f_arr.push(Math.sqrt(dx*dx + dy*dy));
@@ -268,7 +264,6 @@ function run25() {
       <p>Trapecio: <strong>${fmt(trap)} J</strong></p>
       <p>Simpson: <strong>${fmt(simp)} J</strong></p>
       <p>Exacto: <strong>${fmt(exact)} J</strong></p>
-      <p>Aprox (mgh): <strong>${fmt(simple)} J</strong></p>
       ${generateTable(y_arr, g_arr, h, "y", "g(y)")}
     `);
     drawPlot("plot25", [{ x: y_arr, y: g_arr, type: "scatter", mode: "lines+markers", fill: "tozeroy" }], "Ejercicio 25", "y (m)", "g(y)");
@@ -285,17 +280,11 @@ function run26(prefix, resultId, plotId) {
 
     const trap = trapz(w, h);
     const simp = simpsonCombined(w, h);
-    let errorStr = "";
-    if (ref > 0) {
-      let err = Math.abs(trap - ref);
-      errorStr = `<p>Error vs ref (${fmt(ref)}): ${fmt(err)} (${fmt(100*err/ref)}%)</p>`;
-    }
 
     renderResult(resultId, `
       <p><strong>n = ${x.length - 1}</strong>, <strong>h = ${fmt(h)}</strong></p>
       <p>Trapecio: <strong>${fmt(trap)} u²</strong></p>
       <p>Simpson: <strong>${fmt(simp)} u²</strong></p>
-      ${errorStr}
       ${generateTable(x, w, h, "x", "Ancho")}
     `);
     drawPlot(plotId, [{ x: x, y: w, type: "scatter", mode: "lines+markers", fill: "tozeroy" }], "Ejercicio 26", "x", "Ancho");
@@ -325,7 +314,6 @@ function run27() {
   } catch (err) { renderResult("result27", `<p class="error">${err.message}</p>`); }
 }
 
-// Eventos
 document.addEventListener("DOMContentLoaded", () => {
   $("form19").addEventListener("submit", (e) => { e.preventDefault(); run19(); });
   $("form20").addEventListener("submit", (e) => { e.preventDefault(); run20(); });
@@ -338,7 +326,6 @@ document.addEventListener("DOMContentLoaded", () => {
   $("form26titicaca").addEventListener("submit", (e) => { e.preventDefault(); run26("ex26titicaca", "result26titicaca", "plot26titicaca"); });
   $("form27").addEventListener("submit", (e) => { e.preventDefault(); run27(); });
 
-  // Cálculo inicial
   run19(); run20(); run21(); run22(); run23(); run24(); run25();
   run26("ex26erie", "result26erie", "plot26erie");
   run26("ex26titicaca", "result26titicaca", "plot26titicaca");

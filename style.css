@@ -10,7 +10,6 @@
 }
 
 * { box-sizing: border-box; }
-
 html { scroll-behavior: smooth; }
 
 body {
@@ -28,15 +27,8 @@ header {
   text-align: center;
 }
 
-header h1 {
-  margin: 0 0 .35rem;
-  font-size: clamp(1.4rem, 3vw, 2.1rem);
-}
-
-header p {
-  margin: 0;
-  opacity: .92;
-}
+header h1 { margin: 0 0 .35rem; font-size: clamp(1.4rem, 3vw, 2.1rem); }
+header p { margin: 0; opacity: .92; }
 
 nav {
   position: sticky;
@@ -106,8 +98,6 @@ main {
   overflow-x: auto;
 }
 
-.procedure ol { margin-top: .3rem; }
-
 .controls {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
@@ -128,8 +118,7 @@ main {
   color: #2d3a55;
 }
 
-.controls input,
-.controls textarea {
+.controls input, .controls textarea {
   width: 100%;
   padding: .55rem .65rem;
   border: 1px solid #c8d2e3;
@@ -168,13 +157,8 @@ main {
 }
 
 .result p { margin: .3rem 0; }
-
 .error { color: var(--error); font-weight: 700; }
-
-.note {
-  color: var(--muted);
-  font-size: .95rem;
-}
+.note { color: var(--muted); font-size: .95rem; }
 
 .plot {
   width: 100%;
@@ -185,10 +169,7 @@ main {
   background: white;
 }
 
-.table-wrap {
-  overflow-x: auto;
-  margin: .7rem 0;
-}
+.table-wrap { overflow-x: auto; margin: .7rem 0; }
 
 table {
   width: 100%;
@@ -204,45 +185,9 @@ th, td {
   white-space: nowrap;
 }
 
-th {
-  background: #edf3ff;
-  color: #102a56;
-}
-
-details {
-  margin-top: .8rem;
-  border: 1px solid var(--line);
-  border-radius: .6rem;
-  padding: .5rem .8rem;
-  background: #fbfcff;
-}
-
-summary {
-  cursor: pointer;
-  font-weight: 700;
-  color: var(--accent);
-}
-
-pre {
-  overflow-x: auto;
-  padding: .8rem;
-  background: #0f172a;
-  color: #e2e8f0;
-  border-radius: .5rem;
-  font-size: .86rem;
-}
-
-code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
-
-footer {
-  text-align: center;
-  padding: 1.5rem 1rem 2.5rem;
-  color: var(--muted);
-}
+th { background: #edf3ff; color: #102a56; }
 
 @media (max-width: 620px) {
   .exercise { padding: .9rem; border-radius: .7rem; }
   .plot { min-height: 300px; }
-  nav { gap: .25rem; }
-  nav a { min-width: 1.9rem; padding: .25rem .4rem; }
 }
