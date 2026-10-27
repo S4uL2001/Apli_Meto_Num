@@ -3,7 +3,7 @@ import functools
 import numpy as np
 from flask import Flask, request, jsonify, send_from_directory
 
-app = Flask(__name__, static_folder="static", static_url_path="")
+app = Flask(__name__, static_folder=None)
 
 # ---------------------------------------------------------------------------
 # Métodos de integración numérica
@@ -41,8 +41,7 @@ def simpson_combined(y, h):
     Simpson combinado:
     - n par: Simpson 1/3 en todo el intervalo.
     - n múltiplo de 3: Simpson 3/8 en todo el intervalo.
-    - otro n: se busca un bloque inicial par para 1/3 y un bloque final
-      múltiplo de 3 para 3/8. Ejemplo n=7 -> 4+3; n=11 -> 8+3.
+    - otro n: bloque inicial par para 1/3 y bloque final múltiplo de 3 para 3/8.
     """
     y = np.asarray(y, dtype=float)
     n = len(y) - 1
@@ -159,6 +158,24 @@ def tabular_payload(x, y, h, xname="x", yname="y"):
         "rows": rows
     }
     return {"n": n, "h": float(h), "trap": t, "simpson": s, "table": table}
+
+
+# ---------------------------------------------------------------------------
+# Rutas estáticas (sin carpeta static/)
+# ---------------------------------------------------------------------------
+@app.route("/")
+def index():
+    return send_from_directory(".", "index.html")
+
+
+@app.route("/style.css")
+def style():
+    return send_from_directory(".", "style.css")
+
+
+@app.route("/script.js")
+def script():
+    return send_from_directory(".", "script.js")
 
 
 # ---------------------------------------------------------------------------
@@ -514,7 +531,7 @@ def ex26():
     x = np.asarray(data.get("x", [40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 260]), dtype=float)
     w = np.asarray(data.get("w", [8, 20, 40, 55, 65, 66, 63, 65, 55, 40, 20, 8]), dtype=float)
     ref = data.get("ref", 9940.0)
-    _, _, h = parse_tabular({"x": x.tolist(), "w": w.tolist()})
+    _, _, h = parse_tabular({"x": x.tolist(), "y": w.tolist()})
     base = tabular_payload(x, w, h, "x (mi)", "ancho w (mi)")
     area_trap = base["trap"]
     area_simp = base["simpson"]
@@ -618,11 +635,6 @@ def ex27():
             }
         }
     })
-
-
-@app.route("/")
-def index():
-    return send_from_directory(app.static_folder, "index.html")
 
 
 if __name__ == "__main__":
