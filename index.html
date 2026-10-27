@@ -4,14 +4,50 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Métodos Numéricos — Ejercicios 19 al 27</title>
-  <link rel="stylesheet" href="style.css" />
   <script>
-    window.MathJax = {
-      tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] }
-    };
+    window.MathJax = { tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] } };
   </script>
   <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
   <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <style>
+    :root { --bg: #f5f7fb; --card: #ffffff; --ink: #172033; --muted: #5c6780; --accent: #2255a4; --accent2: #0f766e; --line: #d9e0ec; --error: #b42318; }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; background: var(--bg); color: var(--ink); line-height: 1.55; }
+    header { padding: 2rem 1rem 1.5rem; background: linear-gradient(135deg, #102a56, #2255a4); color: white; text-align: center; }
+    header h1 { margin: 0 0 .35rem; font-size: clamp(1.4rem, 3vw, 2.1rem); }
+    header p { margin: 0; opacity: .92; }
+    nav { position: sticky; top: 0; z-index: 10; display: flex; flex-wrap: wrap; justify-content: center; gap: .4rem; padding: .65rem; background: rgba(255,255,255,.94); border-bottom: 1px solid var(--line); backdrop-filter: blur(8px); }
+    nav a { display: inline-block; min-width: 2.2rem; padding: .3rem .55rem; text-align: center; color: var(--accent); text-decoration: none; font-weight: 700; border: 1px solid var(--line); border-radius: .5rem; background: white; }
+    nav a:hover { background: #eef4ff; }
+    main { max-width: 1150px; margin: 0 auto; padding: 1rem; }
+    .exercise { margin: 1.1rem 0; padding: 1.25rem; background: var(--card); border: 1px solid var(--line); border-radius: 1rem; box-shadow: 0 10px 24px rgba(23, 32, 51, .05); }
+    .exercise h2 { margin-top: 0; color: #102a56; border-bottom: 3px solid #e8eef9; padding-bottom: .4rem; }
+    .statement { padding: .8rem 1rem; background: #eef4ff; border-left: 4px solid var(--accent); border-radius: .4rem; margin-bottom: 1rem; }
+    .formulas { padding: .8rem 1rem; background: #f7fafc; border: 1px dashed #b9c6dc; border-radius: .6rem; overflow-x: auto; margin-bottom: 1rem; }
+    .procedure ol { margin-top: .3rem; margin-bottom: 1rem; }
+    .controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: .8rem; align-items: end; margin: 1rem 0; padding: 1rem; background: #fbfcff; border: 1px solid var(--line); border-radius: .7rem; }
+    .controls label { display: flex; flex-direction: column; gap: .3rem; font-weight: 600; color: #2d3a55; }
+    .controls input, .controls textarea { width: 100%; padding: .55rem .65rem; border: 1px solid #c8d2e3; border-radius: .5rem; font: inherit; background: white; color: var(--ink); }
+    .controls textarea { min-height: 4.2rem; resize: vertical; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .92rem; }
+    .controls button { padding: .65rem 1rem; border: 0; border-radius: .55rem; background: var(--accent); color: white; font-weight: 700; cursor: pointer; min-height: 2.6rem; }
+    .controls button:hover { background: #183f7c; }
+    .result { margin: .8rem 0; padding: .9rem 1rem; background: #f8fff9; border-left: 4px solid var(--accent2); border-radius: .4rem; }
+    .result p { margin: .3rem 0; }
+    .error { color: var(--error); font-weight: 700; }
+    .note { color: var(--muted); font-size: .95rem; }
+    .plot { width: 100%; min-height: 360px; margin: .8rem 0; border: 1px solid var(--line); border-radius: .7rem; background: white; }
+    .table-wrap { overflow-x: auto; margin: .7rem 0; }
+    table { width: 100%; border-collapse: collapse; font-size: .88rem; background: white; }
+    th, td { border: 1px solid var(--line); padding: .35rem .45rem; text-align: right; white-space: nowrap; }
+    th { background: #edf3ff; color: #102a56; }
+    details { margin-top: .8rem; border: 1px solid var(--line); border-radius: .6rem; padding: .5rem .8rem; background: #fbfcff; }
+    summary { cursor: pointer; font-weight: 700; color: var(--accent); }
+    pre { overflow-x: auto; padding: .8rem; background: #0f172a; color: #e2e8f0; border-radius: .5rem; font-size: .86rem; }
+    code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    footer { text-align: center; padding: 1.5rem 1rem 2.5rem; color: var(--muted); }
+    @media (max-width: 620px) { .exercise { padding: .9rem; border-radius: .7rem; } .plot { min-height: 300px; } nav { gap: .25rem; } nav a { min-width: 1.9rem; padding: .25rem .4rem; } }
+  </style>
 </head>
 <body>
 <header>
@@ -20,9 +56,7 @@
 </header>
 
 <nav>
-  <a href="#ex19">19</a><a href="#ex20">20</a><a href="#ex21">21</a>
-  <a href="#ex22">22</a><a href="#ex23">23</a><a href="#ex24">24</a>
-  <a href="#ex25">25</a><a href="#ex26">26</a><a href="#ex27">27</a>
+  <a href="#ex19">19</a><a href="#ex20">20</a><a href="#ex21">21</a><a href="#ex22">22</a><a href="#ex23">23</a><a href="#ex24">24</a><a href="#ex25">25</a><a href="#ex26">26</a><a href="#ex27">27</a>
 </nav>
 
 <main>
@@ -35,17 +69,40 @@
       <p>\[T=h\left[\frac{f_0+f_n}{2}+\sum_{i=1}^{n-1}f_i\right]\]</p>
       <p>Simpson combinado para \(n=7\): Simpson \(1/3\) en \(0\!-\!4\) y Simpson \(3/8\) en \(4\!-\!7\).</p>
     </div>
+    <div class="procedure">
+      <h3>Procedimiento</h3>
+      <ol>
+        <li>Se identifican \(t\) en segundos y \(v\) en mi/h.</li>
+        <li>La integral de \(v(t)\) respecto de \(t\) entrega mi/h·s; se divide entre 3600 para obtener millas.</li>
+        <li>Se aplica trapecio compuesto y Simpson combinado.</li>
+      </ol>
+    </div>
     <form id="form19" class="controls">
-      <label>t (s) separados por coma
-        <textarea id="ex19-t">0,1,2,3,4,5,6,7</textarea>
-      </label>
-      <label>v (mi/h) separadas por coma
-        <textarea id="ex19-v">0,14,39,69,95,114,129,139</textarea>
-      </label>
+      <label>t (s) separados por coma<textarea id="ex19-t">0,1,2,3,4,5,6,7</textarea></label>
+      <label>v (mi/h) separadas por coma<textarea id="ex19-v">0,14,39,69,95,114,129,139</textarea></label>
       <button type="submit">Calcular</button>
     </form>
     <div id="result19" class="result"></div>
     <div id="plot19" class="plot"></div>
+    <details><summary>Código Python usado</summary><pre><code>def trapz(y, h):
+    return h * (0.5*y[0] + 0.5*y[-1] + sum(y[1:-1]))
+
+def simpson13(y, h):
+    n = len(y) - 1
+    s = y[0] + y[-1]
+    for i in range(1, n):
+        s += (4 if i % 2 == 1 else 2) * y[i]
+    return h * s / 3
+
+def simpson38(y, h):
+    n = len(y) - 1
+    s = y[0] + y[-1]
+    for i in range(1, n):
+        s += (3 if i % 3 != 0 else 2) * y[i]
+    return 3 * h * s / 8
+
+d_trap = trapz(v, h) / 3600
+d_simpson = (simpson13(v[:5], h) + simpson38(v[4:], h)) / 3600</code></pre></details>
   </section>
 
   <!-- EJERCICIO 20 -->
@@ -57,17 +114,24 @@
       <p>\[W_{\text{trap}}=h\left[\frac{F_0+F_n}{2}+\sum_{i=1}^{n-1}F_i\right]\]</p>
       <p>Simpson combinado con \(n=7\): \(4\) subintervalos \(1/3\) y \(3\) subintervalos \(3/8\).</p>
     </div>
+    <div class="procedure">
+      <h3>Procedimiento</h3>
+      <ol>
+        <li>Se tabulan \(x\) en pulgadas y \(F\) en libras.</li>
+        <li>La integral entrega lb·in; se convierte a joules con \(1\ \text{lb}\cdot\text{in}=0.112984829\ \text{J}\).</li>
+      </ol>
+    </div>
     <form id="form20" class="controls">
-      <label>x (in)
-        <textarea id="ex20-x">0,0.4,0.8,1.2,1.6,2.0,2.4,2.8</textarea>
-      </label>
-      <label>F (lb)
-        <textarea id="ex20-F">0,0.85,1.30,1.60,1.87,2.14,2.34,2.52</textarea>
-      </label>
+      <label>x (in)<textarea id="ex20-x">0,0.4,0.8,1.2,1.6,2.0,2.4,2.8</textarea></label>
+      <label>F (lb)<textarea id="ex20-F">0,0.85,1.30,1.60,1.87,2.14,2.34,2.52</textarea></label>
       <button type="submit">Calcular</button>
     </form>
     <div id="result20" class="result"></div>
     <div id="plot20" class="plot"></div>
+    <details><summary>Código Python usado</summary><pre><code>W_trap = trapz(F, h)                 # lb*in
+W_simpson = simpson13(F[:5], h) + simpson38(F[4:], h)
+W_trap_J = W_trap * 0.112984829
+W_simpson_J = W_simpson * 0.112984829</code></pre></details>
   </section>
 
   <!-- EJERCICIO 21 -->
@@ -79,16 +143,14 @@
       <p>Con \(n=9\), Simpson combinado: Simpson \(1/3\) en los primeros 8 subintervalos y trapecio en el noveno.</p>
     </div>
     <form id="form21" class="controls">
-      <label>x
-        <textarea id="ex21-x">1,2,3,4,5,6,7,8,9,10</textarea>
-      </label>
-      <label>y aproximada
-        <textarea id="ex21-y">1.3,3.7,4.6,4.4,2.7,2.5,3.6,5.3,6.0,5.9</textarea>
-      </label>
+      <label>x<textarea id="ex21-x">1,2,3,4,5,6,7,8,9,10</textarea></label>
+      <label>y aproximada<textarea id="ex21-y">1.3,3.7,4.6,4.4,2.7,2.5,3.6,5.3,6.0,5.9</textarea></label>
       <button type="submit">Calcular</button>
     </form>
     <div id="result21" class="result"></div>
     <div id="plot21" class="plot"></div>
+    <details><summary>Código Python usado</summary><pre><code>A_trap = trapz(y, h)
+A_simpson = simpson13(y[:9], h) + (y[8] + y[9]) * h / 2</code></pre></details>
   </section>
 
   <!-- EJERCICIO 22 -->
@@ -108,6 +170,12 @@
     </form>
     <div id="result22" class="result"></div>
     <div id="plot22" class="plot"></div>
+    <details><summary>Código Python usado</summary><pre><code>def f(x):
+    return np.cosh(x / a)
+
+L_trap = trapz(f(x), h)
+L_simpson = simpson_combined(f(x), h)
+L_exact = a * (np.sinh(x1/a) - np.sinh(x0/a))</code></pre></details>
   </section>
 
   <!-- EJERCICIO 23 -->
@@ -126,6 +194,12 @@
     </form>
     <div id="result23" class="result"></div>
     <div id="plot23" class="plot"></div>
+    <details><summary>Código Python usado</summary><pre><code>r = np.linspace(0, R, n+1)
+v = vmax * (1 - r/R)**(1/7)
+integrando = 2*np.pi*r*v
+Q_trap = trapz(integrando, h)
+Q_simpson = simpson_combined(integrando, h)
+Q_exacto = 49*np.pi/12</code></pre></details>
   </section>
 
   <!-- EJERCICIO 24 -->
@@ -143,6 +217,15 @@
     </form>
     <div id="result24" class="result"></div>
     <div id="plot24" class="plot"></div>
+    <details><summary>Código Python usado</summary><pre><code>t = np.linspace(0, 2*np.pi, n+1)
+x = 2*b*np.cos(t) - b*np.cos(2*t)
+y = 2*b*np.sin(t) - b*np.sin(2*t)
+dx = -2*b*np.sin(t) + 2*b*np.sin(2*t)
+dy = 2*b*np.cos(t) - 2*b*np.cos(2*t)
+rapidez = np.sqrt(dx**2 + dy**2)
+L_trap = trapz(rapidez, h)
+L_simpson = simpson_combined(rapidez, h)
+L_exacta = 16*b</code></pre></details>
   </section>
 
   <!-- EJERCICIO 25 -->
@@ -163,63 +246,266 @@
     </form>
     <div id="result25" class="result"></div>
     <div id="plot25" class="plot"></div>
+    <details><summary>Código Python usado</summary><pre><code>y = np.linspace(0, h, n+1)
+g = g0 * R**2 / (R + y)**2
+integrando = g
+dU_trap = m * trapz(integrando, h)
+dU_simpson = m * simpson_combined(integrando, h)
+dU_exacta = m * g0 * R * h / (R + h)
+dU_constante = m * g0 * h</code></pre></details>
   </section>
 
   <!-- EJERCICIO 26 -->
   <section id="ex26" class="exercise">
     <h2>Ejercicio 26. Superficie de lago</h2>
-    <p class="statement">Estimar el área del lago Erie. Los datos son ilustrativos y editables.</p>
+    <p class="statement">Estimar el área del lago Erie a partir de anchuras medidas. Los datos precargados de Erie son <strong>ilustrativos</strong> y están ajustados solo para demostrar el cálculo; no son mediciones oficiales.</p>
     <div class="formulas">
       <p>\[A=\int_{x_0}^{x_n} w(x)\,dx\]</p>
     </div>
+    <h3>Lago Erie — datos de ejemplo editables</h3>
     <form id="form26erie" class="controls">
-      <label>x (mi)
-        <textarea id="ex26erie-x">40,60,80,100,120,140,160,180,200,220,240,260</textarea>
-      </label>
-      <label>ancho w (mi)
-        <textarea id="ex26erie-w">8,20,40,55,65,66,63,65,55,40,20,8</textarea>
-      </label>
+      <label>x (mi)<textarea id="ex26erie-x">40,60,80,100,120,140,160,180,200,220,240,260</textarea></label>
+      <label>ancho w (mi)<textarea id="ex26erie-w">8,20,40,55,65,66,63,65,55,40,20,8</textarea></label>
       <label>Área de referencia (mi²)<input id="ex26erie-ref" type="number" value="9940" step="any"></label>
       <button type="submit">Calcular Erie</button>
     </form>
     <div id="result26erie" class="result"></div>
     <div id="plot26erie" class="plot"></div>
 
-    <h3 style="margin-top:2rem;">Adaptación al Titicaca</h3>
+    <h3 style="margin-top:2rem;">Adaptación al Titicaca — datos ilustrativos editables</h3>
     <form id="form26titicaca" class="controls">
-      <label>x (km)
-        <textarea id="ex26titicaca-x">0,20,40,60,80,100,120,140,160,180,200</textarea>
-      </label>
-      <label>ancho w (km)
-        <textarea id="ex26titicaca-w">5,20,40,51.6,62,66.4,62,51.6,40,20,5</textarea>
-      </label>
+      <label>x (km)<textarea id="ex26titicaca-x">0,20,40,60,80,100,120,140,160,180,200</textarea></label>
+      <label>ancho w (km)<textarea id="ex26titicaca-w">5,20,40,51.6,62,66.4,62,51.6,40,20,5</textarea></label>
       <label>Área de referencia (km²)<input id="ex26titicaca-ref" type="number" value="8372" step="any"></label>
       <button type="submit">Calcular Titicaca</button>
     </form>
     <div id="result26titicaca" class="result"></div>
     <div id="plot26titicaca" class="plot"></div>
+
+    <details><summary>Código Python usado</summary><pre><code>A_trap = trapz(w, h)
+A_simpson = simpson_combined(w, h)
+error = abs(A_trap - A_ref)
+error_pct = 100*error/abs(A_ref)</code></pre></details>
   </section>
 
   <!-- EJERCICIO 27 -->
   <section id="ex27" class="exercise">
     <h2>Ejercicio 27. Geometría de un objeto alargado</h2>
-    <p class="statement">Con datos de diámetro a lo largo del eje, estimar el volumen.</p>
+    <p class="statement">Con datos de diámetro a lo largo del eje, estimar el volumen y discutir la diferencia entre la fórmula simplificada y el área real de revolución.</p>
     <div class="formulas">
       <p>\[V=\pi\int_0^{12} r(z)^2\,dz,\qquad r(z)=\frac{d(z)}{2}\]</p>
     </div>
     <form id="form27" class="controls">
-      <label>z (in)
-        <textarea id="ex27-z">0,1,2,3,4,5,6,7,8,9,10,11,12</textarea>
-      </label>
-      <label>d (in)
-        <textarea id="ex27-d">0,2.6,3.2,4.8,5.6,6.0,6.2,6.0,5.6,4.8,3.3,2.6,0</textarea>
-      </label>
+      <label>z (in)<textarea id="ex27-z">0,1,2,3,4,5,6,7,8,9,10,11,12</textarea></label>
+      <label>d (in)<textarea id="ex27-d">0,2.6,3.2,4.8,5.6,6.0,6.2,6.0,5.6,4.8,3.3,2.6,0</textarea></label>
       <button type="submit">Calcular</button>
     </form>
     <div id="result27" class="result"></div>
     <div id="plot27" class="plot"></div>
+    <details><summary>Código Python usado</summary><pre><code>r = d/2
+V_trap = np.pi * trapz(r**2, h)
+V_simpson = np.pi * simpson_combined(r**2, h)
+S_simple = 2*np.pi * trapz(r, h)
+dr = np.gradient(r, z)
+integrando_geom = 2*np.pi*r*np.sqrt(1 + dr**2)
+S_geom = trapz(integrando_geom, h)</code></pre></details>
   </section>
 </main>
-<script src="script.js"></script>
+
+<footer>
+  <p>Proyecto de Métodos Numéricos · La Paz, Bolivia · Interfaz académica funcional</p>
+</footer>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const parseList = (text) => text.split(/[\s,;]+/).filter(Boolean).map(Number);
+const fmt = (value, digits = 6) => (value === null || value === undefined || Number.isNaN(value)) ? "—" : Number(value).toLocaleString("es-BO", { maximumFractionDigits: digits });
+
+function trapz(y, h) {
+  let sum = 0;
+  for (let i = 1; i < y.length - 1; i++) sum += y[i];
+  return h * (0.5 * y[0] + 0.5 * y[y.length - 1] + sum);
+}
+function simpson13(y, h) {
+  let n = y.length - 1;
+  if (n < 2 || n % 2 !== 0) return null;
+  let sum = y[0] + y[n];
+  for (let i = 1; i < n; i++) sum += (i % 2 === 1 ? 4 : 2) * y[i];
+  return (h / 3) * sum;
+}
+function simpson38(y, h) {
+  let n = y.length - 1;
+  if (n < 3 || n % 3 !== 0) return null;
+  let sum = y[0] + y[n];
+  for (let i = 1; i < n; i++) sum += (i % 3 !== 0 ? 3 : 2) * y[i];
+  return (3 * h / 8) * sum;
+}
+function simpsonCombined(y, h) {
+  let n = y.length - 1;
+  if (n < 2) return null;
+  if (n % 2 === 0) return simpson13(y, h);
+  if (n % 3 === 0) return simpson38(y, h);
+  for (let k = n - 3; k > 1; k -= 2) {
+    if ((n - k) % 3 === 0) {
+      let a = simpson13(y.slice(0, k + 1), h);
+      let b = simpson38(y.slice(k), h);
+      if (a !== null && b !== null) return a + b;
+    }
+  }
+  return null;
+}
+
+function generateTable(x, y, h, xname="x", yname="y") {
+  let html = `<div class="table-wrap"><table><thead><tr><th>i</th><th>${xname}</th><th>${yname}</th><th>Peso Trap</th></tr></thead><tbody>`;
+  for (let i = 0; i < x.length; i++) {
+    let w = (i === 0 || i === x.length - 1) ? h / 2 : h;
+    html += `<tr><td>${i}</td><td>${fmt(x[i])}</td><td>${fmt(y[i])}</td><td>${fmt(w)}</td></tr>`;
+  }
+  return html + `</tbody></table></div>`;
+}
+
+function renderResult(id, html) {
+  const el = $(id);
+  el.innerHTML = html;
+  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([el]).catch(() => {});
+}
+
+function drawPlot(id, traces, layoutTitle, xTitle, yTitle) {
+  Plotly.newPlot($(id), traces, {
+    title: layoutTitle, xaxis: { title: xTitle }, yaxis: { title: yTitle },
+    margin: { t: 40, b: 40, l: 50, r: 20 }
+  }, { responsive: true, displaylogo: false });
+}
+
+function run19() {
+  try {
+    const t = parseList($("ex19-t").value), v = parseList($("ex19-v").value);
+    if (t.length !== v.length || t.length < 2) throw new Error("Datos inválidos.");
+    const h = (t[t.length - 1] - t[0]) / (t.length - 1);
+    renderResult("result19", `<p>n = ${t.length-1}, h = ${fmt(h)} s</p><p>Trap: <b>${fmt(trapz(v, h)/3600)} mi</b></p><p>Simp: <b>${fmt(simpsonCombined(v, h)/3600)} mi</b></p>${generateTable(t, v, h, "t (s)", "v (mi/h)")}`);
+    drawPlot("plot19", [{ x: t, y: v, type: "scatter", mode: "lines+markers", fill: "tozeroy" }], "Ejercicio 19", "t", "v");
+  } catch (err) { renderResult("result19", `<p class="error">${err.message}</p>`); }
+}
+
+function run20() {
+  try {
+    const x = parseList($("ex20-x").value), f = parseList($("ex20-F").value);
+    if (x.length !== f.length || x.length < 2) throw new Error("Datos inválidos.");
+    const h = (x[x.length - 1] - x[0]) / (x.length - 1);
+    renderResult("result20", `<p>n = ${x.length-1}, h = ${fmt(h)}</p><p>Trap: <b>${fmt(trapz(f, h))} lb·in</b></p><p>Simp: <b>${fmt(simpsonCombined(f, h))} lb·in</b></p>${generateTable(x, f, h)}`);
+    drawPlot("plot20", [{ x: x, y: f, type: "scatter", mode: "lines+markers", fill: "tozeroy" }], "Ejercicio 20", "x", "F");
+  } catch (err) { renderResult("result20", `<p class="error">${err.message}</p>`); }
+}
+
+function run21() {
+  try {
+    const x = parseList($("ex21-x").value), y = parseList($("ex21-y").value);
+    if (x.length !== y.length || x.length < 2) throw new Error("Datos inválidos.");
+    const h = (x[x.length - 1] - x[0]) / (x.length - 1);
+    // Ajustado exactamente a lo que pide el manual para n=9
+    const simpson9 = simpson13(y.slice(0, 9), h) + (y[8] + y[9]) * h / 2;
+    renderResult("result21", `<p>n = ${x.length-1}, h = ${fmt(h)}</p><p>Trap: <b>${fmt(trapz(y, h))}</b></p><p>Simp: <b>${fmt(simpson9)}</b></p>${generateTable(x, y, h)}`);
+    drawPlot("plot21", [{ x: x, y: y, type: "scatter", mode: "lines+markers", fill: "tozeroy" }], "Ejercicio 21", "x", "y");
+  } catch (err) { renderResult("result21", `<p class="error">${err.message}</p>`); }
+}
+
+function run22() {
+  try {
+    const a = Number($("ex22-a").value), x0 = Number($("ex22-x0").value), x1 = Number($("ex22-x1").value), n = Number($("ex22-n").value);
+    const h = (x1 - x0) / n;
+    let x_arr = [], y_arr = [], f_arr = [];
+    for (let i = 0; i <= n; i++) {
+      let xi = x0 + i * h;
+      x_arr.push(xi); y_arr.push(a * Math.cosh(xi / a)); f_arr.push(Math.cosh(xi / a));
+    }
+    renderResult("result22", `<p>Trap: <b>${fmt(trapz(f_arr, h))}</b></p><p>Simp: <b>${fmt(simpsonCombined(f_arr, h))}</b></p><p>Exacto: <b>${fmt(a * (Math.sinh(x1/a) - Math.sinh(x0/a)))}</b></p>`);
+    drawPlot("plot22", [{ x: x_arr, y: y_arr, type: "scatter", mode: "lines+markers" }], "Ejercicio 22", "x", "y");
+  } catch (err) { renderResult("result22", `<p class="error">${err.message}</p>`); }
+}
+
+function run23() {
+  try {
+    const R = Number($("ex23-R").value), vmax = Number($("ex23-vmax").value), n = Number($("ex23-n").value);
+    const h = R / n;
+    let r_arr = [], v_arr = [], f_arr = [];
+    for (let i = 0; i <= n; i++) {
+      let ri = i * h; r_arr.push(ri);
+      let vi = vmax * Math.pow(Math.max(0, 1 - ri/R), 1/7); v_arr.push(vi); f_arr.push(2 * Math.PI * ri * vi);
+    }
+    renderResult("result23", `<p>Trap: <b>${fmt(trapz(f_arr, h))}</b></p><p>Simp: <b>${fmt(simpsonCombined(f_arr, h))}</b></p><p>Exacto: <b>${fmt(49 * Math.PI / 12)}</b></p>`);
+    drawPlot("plot23", [{ x: r_arr, y: v_arr, type: "scatter", mode: "lines+markers", fill: "tozeroy" }], "Ejercicio 23", "r", "v(r)");
+  } catch (err) { renderResult("result23", `<p class="error">${err.message}</p>`); }
+}
+
+function run24() {
+  try {
+    const b = Number($("ex24-b").value), n = Number($("ex24-n").value);
+    const h = (2 * Math.PI) / n;
+    let t_arr = [], x_arr = [], y_arr = [], f_arr = [];
+    for (let i = 0; i <= n; i++) {
+      let ti = i * h; t_arr.push(ti);
+      x_arr.push(2*b*Math.cos(ti) - b*Math.cos(2*ti)); y_arr.push(2*b*Math.sin(ti) - b*Math.sin(2*ti));
+      let dx = -2*b*Math.sin(ti) + 2*b*Math.sin(2*ti), dy = 2*b*Math.cos(ti) - 2*b*Math.cos(2*ti);
+      f_arr.push(Math.sqrt(dx*dx + dy*dy));
+    }
+    renderResult("result24", `<p>Trap: <b>${fmt(trapz(f_arr, h))}</b></p><p>Simp: <b>${fmt(simpsonCombined(f_arr, h))}</b></p><p>Exacto: <b>${fmt(16 * b)}</b></p>`);
+    drawPlot("plot24", [{ x: x_arr, y: y_arr, type: "scatter", mode: "lines" }], "Ejercicio 24", "x(t)", "y(t)");
+  } catch (err) { renderResult("result24", `<p class="error">${err.message}</p>`); }
+}
+
+function run25() {
+  try {
+    const m = Number($("ex25-m").value), h_alt = Number($("ex25-h").value), R = Number($("ex25-R").value), g0 = Number($("ex25-g0").value), n = Number($("ex25-n").value);
+    const h = h_alt / n;
+    let y_arr = [], g_arr = [], f_arr = [];
+    for (let i = 0; i <= n; i++) {
+      let yi = i * h; y_arr.push(yi); let gi = g0 * R * R / Math.pow(R + yi, 2); g_arr.push(gi); f_arr.push(gi);
+    }
+    renderResult("result25", `<p>Trap: <b>${fmt(trapz(f_arr, h)*m)} J</b></p><p>Simp: <b>${fmt(simpsonCombined(f_arr, h)*m)} J</b></p><p>Exacto: <b>${fmt(m*g0*R*h_alt/(R+h_alt))} J</b></p>`);
+    drawPlot("plot25", [{ x: y_arr, y: g_arr, type: "scatter", mode: "lines+markers", fill: "tozeroy" }], "Ejercicio 25", "y", "g(y)");
+  } catch (err) { renderResult("result25", `<p class="error">${err.message}</p>`); }
+}
+
+function run26(prefix, resultId, plotId) {
+  try {
+    const x = parseList($(`${prefix}-x`).value), w = parseList($(`${prefix}-w`).value);
+    const ref = Number($(`${prefix}-ref`).value);
+    const h = (x[x.length - 1] - x[0]) / (x.length - 1);
+    const trap = trapz(w, h);
+    const simp = simpsonCombined(w, h);
+    let errStr = ref ? `<p>Error vs ref (${ref}): ${fmt(Math.abs(trap - ref))} (${fmt(100 * Math.abs(trap - ref) / ref)}%)</p>` : "";
+    renderResult(resultId, `<p>Trap: <b>${fmt(trap)}</b></p><p>Simp: <b>${fmt(simp)}</b></p>${errStr}`);
+    drawPlot(plotId, [{ x: x, y: w, type: "scatter", mode: "lines+markers", fill: "tozeroy" }], "Ejercicio 26", "x", "w");
+  } catch (err) { renderResult(resultId, `<p class="error">${err.message}</p>`); }
+}
+
+function run27() {
+  try {
+    const z = parseList($("ex27-z").value), d = parseList($("ex27-d").value);
+    const h = (z[z.length - 1] - z[0]) / (z.length - 1);
+    let r = d.map(val => val / 2), r2 = r.map(val => val * val);
+    renderResult("result27", `<p>Trap: <b>${fmt(Math.PI*trapz(r2, h))} in³</b></p><p>Simp: <b>${fmt(Math.PI*simpsonCombined(r2, h))} in³</b></p>`);
+    drawPlot("plot27", [{ x: z, y: r, type: "scatter", mode: "lines+markers", fill: "tozeroy" }], "Ejercicio 27", "z", "r(z)");
+  } catch (err) { renderResult("result27", `<p class="error">${err.message}</p>`); }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  $("form19").onsubmit = (e) => { e.preventDefault(); run19(); };
+  $("form20").onsubmit = (e) => { e.preventDefault(); run20(); };
+  $("form21").onsubmit = (e) => { e.preventDefault(); run21(); };
+  $("form22").onsubmit = (e) => { e.preventDefault(); run22(); };
+  $("form23").onsubmit = (e) => { e.preventDefault(); run23(); };
+  $("form24").onsubmit = (e) => { e.preventDefault(); run24(); };
+  $("form25").onsubmit = (e) => { e.preventDefault(); run25(); };
+  $("form26erie").onsubmit = (e) => { e.preventDefault(); run26("ex26erie", "result26erie", "plot26erie"); };
+  $("form26titicaca").onsubmit = (e) => { e.preventDefault(); run26("ex26titicaca", "result26titicaca", "plot26titicaca"); };
+  $("form27").onsubmit = (e) => { e.preventDefault(); run27(); };
+
+  run19(); run20(); run21(); run22(); run23(); run24(); run25();
+  run26("ex26erie", "result26erie", "plot26erie");
+  run26("ex26titicaca", "result26titicaca", "plot26titicaca");
+  run27();
+});
+</script>
 </body>
 </html>
