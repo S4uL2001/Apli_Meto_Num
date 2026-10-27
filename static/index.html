@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Métodos Numéricos — Ejercicios 19 al 27</title>
+  <link rel="stylesheet" href="style.css" />
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] }
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+</head>
+<body>
+<header>
+  <h1>Métodos Numéricos — Integración Numérica</h1>
+  <p>Ejercicios 19 al 27 · Trapecio compuesto · Simpson 1/3 · Simpson 3/8</p>
+</header>
+
+<nav>
+  <a href="#ex19">19</a><a href="#ex20">20</a><a href="#ex21">21</a>
+  <a href="#ex22">22</a><a href="#ex23">23</a><a href="#ex24">24</a>
+  <a href="#ex25">25</a><a href="#ex26">26</a><a href="#ex27">27</a>
+</nav>
+
+<main>
+  <!-- EJERCICIO 19 -->
+  <section id="ex19" class="exercise">
+    <h2>Ejercicio 19. Transporte urbano</h2>
+    <p class="statement">Un vehículo experimental registra su velocidad durante los primeros siete segundos. Estimar la distancia recorrida integrando \(v(t)\).</p>
+    <div class="formulas">
+      <p>\[d=\int_0^7 v(t)\,dt,\qquad d_{\text{mi}}=\frac{1}{3600}\int_0^7 v(t)\,dt\]</p>
+      <p>\[T=h\left[\frac{f_0+f_n}{2}+\sum_{i=1}^{n-1}f_i\right]\]</p>
+      <p>Simpson combinado para \(n=7\): Simpson \(1/3\) en \(0\!-\!4\) y Simpson \(3/8\) en \(4\!-\!7\).</p>
+    </div>
+    <div class="procedure">
+      <h3>Procedimiento</h3>
+      <ol>
+        <li>Se identifican \(t\) en segundos y \(v\) en mi/h.</li>
+        <li>La integral de \(v(t)\) respecto de \(t\) entrega mi/h·s; se divide entre 3600 para obtener millas.</li>
+        <li>Se aplica trapecio compuesto y Simpson combinado.</li>
+      </ol>
+    </div>
+    <form id="form19" class="controls">
+      <label>t (s) separados por coma
+        <textarea id="ex19-t">0,1,2,3,4,5,6,7</textarea>
+      </label>
+      <label>v (mi/h) separadas por coma
+        <textarea id="ex19-v">0,14,39,69,95,114,129,139</textarea>
+      </label>
+      <button type="submit">Calcular</button>
+    </form>
+    <div id="result19" class="result"></div>
+    <div id="plot19" class="plot"></div>
+    <details><summary>Código Python usado</summary><pre><code>def trapz(y, h):
+    return h * (0.5*y[0] + 0.5*y[-1] + sum(y[1:-1]))
+
+def simpson13(y, h):
+    n = len(y) - 1
+    s = y[0] + y[-1]
+    for i in range(1, n):
+        s += (4 if i % 2 == 1 else 2) * y[i]
+    return h * s / 3
+
+def simpson38(y, h):
+    n = len(y) - 1
+    s = y[0] + y[-1]
+    for i in range(1, n):
+        s += (3 if i % 3 != 0 else 2) * y[i]
+    return 3 * h * s / 8
+
+d_trap = trapz(v, h) / 3600
+d_simpson = (simpson13(v[:5], h) + simpson38(v[4:], h)) / 3600</code></pre></details>
+  </section>
+
+  <!-- EJERCICIO 20 -->
+  <section id="ex20" class="exercise">
+    <h2>Ejercicio 20. Ensayo de elasticidad</h2>
+    <p class="statement">Una banda elástica es estirada y se mide la fuerza en distintos desplazamientos. Calcular el trabajo de la fuerza.</p>
+    <div class="formulas">
+      <p>\[W=\int_0^{2.8} F(x)\,dx\]</p>
+      <p>\[W_{\text{trap}}=h\left[\frac{F_0+F_n}{2}+\sum_{i=1}^{n-1}F_i\right]\]</p>
+      <p>Simpson combinado con \(n=7\): \(4\) subintervalos \(1/3\) y \(3\) subintervalos \(3/8\).</p>
+    </div>
+    <div class="procedure">
+      <h3>Procedimiento</h3>
+      <ol>
+        <li>Se tabulan \(x\) en pulgadas y \(F\) en libras.</li>
+        <li>La integral entrega lb·in; se convierte a joules con \(1\ \text{lb}\cdot\text{in}=0.112984829\ \text{J}\).</li>
+      </ol>
+    </div>
+    <form id="form20" class="controls">
+      <label>x (in)
+        <textarea id="ex20-x">0,0.4,0.8,1.2,1.6,2.0,2.4,2.8</textarea>
+      </label>
+      <label>F (lb)
+        <textarea id="ex20-F">0,0.85,1.30,1.60,1.87,2.14,2.34,2.52</textarea>
+      </label>
+      <button type="submit">Calcular</button>
+    </form>
+    <div id="result20" class="result"></div>
+    <div id="plot20" class="plot"></div>
+    <details><summary>Código Python usado</summary><pre><code>W_trap = trapz(F, h)                 # lb*in
+W_simpson = simpson13(F[:5], h) + simpson38(F[4:], h)
+W_trap_J = W_trap * 0.112984829
+W_simpson_J = W_simpson * 0.112984829</code></pre></details>
+  </section>
+
+  <!-- EJERCICIO 21 -->
+  <section id="ex21" class="exercise">
+    <h2>Ejercicio 21. Perfil topográfico</h2>
+    <p class="statement">A partir de una gráfica de altura respecto de posición, estimar el área bajo el perfil entre \(x=1\) y \(x=10\); registrar las coordenadas digitalizadas.</p>
+    <div class="formulas">
+      <p>\[A=\int_1^{10} y(x)\,dx\]</p>
+      <p>Con \(n=9\), Simpson combinado: Simpson \(1/3\) en los primeros 8 subintervalos y trapecio en el noveno.</p>
+    </div>
+    <div class="procedure">
+      <h3>Procedimiento</h3>
+      <ol>
+        <li>Se usan coordenadas digitalizadas ilustrativas del documento.</li>
+        <li>Se calcula trapecio compuesto y Simpson combinado; la precisión depende de la digitalización.</li>
+      </ol>
+    </div>
+    <form id="form21" class="controls">
+      <label>x
+        <textarea id="ex21-x">1,2,3,4,5,6,7,8,9,10</textarea>
+      </label>
+      <label>y aproximada
+        <textarea id="ex21-y">1.3,3.7,4.6,4.4,2.7,2.5,3.6,5.3,6.0,5.9</textarea>
+      </label>
+      <button type="submit">Calcular</button>
+    </form>
+    <div id="result21" class="result"></div>
+    <div id="plot21" class="plot"></div>
+    <details><summary>Código Python usado</summary><pre><code>A_trap = trapz(y, h)
+A_simpson = simpson13(y[:9], h) + (y[8] + y[9]) * h / 2</code></pre></details>
+  </section>
+
+  <!-- EJERCICIO 22 -->
+  <section id="ex22" class="exercise">
+    <h2>Ejercicio 22. Cable suspendido</h2>
+    <p class="statement">Un cable tiene la forma de una catenaria \(y=a\cosh(x/a)\). Estimar su longitud entre dos apoyos. Modelo geométrico simplificado, no cálculo de ingeniería del teleférico.</p>
+    <div class="formulas">
+      <p>\[y=a\cosh\left(\frac{x}{a}\right),\qquad y'=\sinh\left(\frac{x}{a}\right)\]</p>
+      <p>\[L=\int_{x_0}^{x_1}\sqrt{1+(y')^2}\,dx=\int_{x_0}^{x_1}\cosh\left(\frac{x}{a}\right)\,dx\]</p>
+      <p>\[L=a\left[\sinh\left(\frac{x_1}{a}\right)-\sinh\left(\frac{x_0}{a}\right)\right]\]</p>
+    </div>
+    <form id="form22" class="controls">
+      <label>a (ft)<input id="ex22-a" type="number" value="24" step="any"></label>
+      <label>x0 (ft)<input id="ex22-x0" type="number" value="-12" step="any"></label>
+      <label>x1 (ft)<input id="ex22-x1" type="number" value="26" step="any"></label>
+      <label>n<input id="ex22-n" type="number" value="8" min="2" step="1"></label>
+      <button type="submit">Calcular</button>
+    </form>
+    <div id="result22" class="result"></div>
+    <div id="plot22" class="plot"></div>
+    <details><summary>Código Python usado</summary><pre><code>def f(x):
+    return np.cosh(x / a)
+
+L_trap = trapz(f(x), h)
+L_simpson = simpson_combined(f(x), h)
+L_exact = a * (np.sinh(x1/a) - np.sinh(x0/a))</code></pre></details>
+  </section>
+
+  <!-- EJERCICIO 23 -->
+  <section id="ex23" class="exercise">
+    <h2>Ejercicio 23. Red de abastecimiento de agua</h2>
+    <p class="statement">Determinar el caudal de una tubería circular con el perfil turbulento de velocidad especificado.</p>
+    <div class="formulas">
+      <p>\[v(r)=80\left(1-\frac{r}{R}\right)^{1/7},\qquad R=0.25\ \text{in}\]</p>
+      <p>\[Q=\int_0^R 2\pi r\,v(r)\,dr\]</p>
+      <p>\[Q_{\text{exacto}}=2\pi(80)R^2\left(\frac{1}{1+1/7}-\frac{1}{2+1/7}\right)=\frac{49\pi}{12}\]</p>
+    </div>
+    <form id="form23" class="controls">
+      <label>R (in)<input id="ex23-R" type="number" value="0.25" step="any"></label>
+      <label>v máx (in/s)<input id="ex23-vmax" type="number" value="80" step="any"></label>
+      <label>n<input id="ex23-n" type="number" value="8" min="2" step="1"></label>
+      <button type="submit">Calcular</button>
+    </form>
+    <div id="result23" class="result"></div>
+    <div id="plot23" class="plot"></div>
+    <details><summary>Código Python usado</summary><pre><code>r = np.linspace(0, R, n+1)
+v = vmax * (1 - r/R)**(1/7)
+integrando = 2*np.pi*r*v
+Q_trap = trapz(integrando, h)
+Q_simpson = simpson_combined(integrando, h)
+Q_exacto = 49*np.pi/12</code></pre></details>
+  </section>
+
+  <!-- EJERCICIO 24 -->
+  <section id="ex24" class="exercise">
+    <h2>Ejercicio 24. Diseño de una trayectoria</h2>
+    <p class="statement">Representar una cardioide paramétrica con \(b=5\) y estimar su longitud entre \(t=0\) y \(t=2\pi\).</p>
+    <div class="formulas">
+      <p>\[x(t)=2b\cos t-b\cos 2t,\qquad y(t)=2b\sin t-b\sin 2t\]</p>
+      <p>\[L=\int_0^{2\pi}\sqrt{[x'(t)]^2+[y'(t)]^2}\,dt\]</p>
+      <p>Para esta cardioide, \(\sqrt{x'^2+y'^2}=4b\sin(t/2)\), por lo que \(L=16b\).</p>
+    </div>
+    <form id="form24" class="controls">
+      <label>b<input id="ex24-b" type="number" value="5" step="any"></label>
+      <label>n<input id="ex24-n" type="number" value="8" min="2" step="1"></label>
+      <button type="submit">Calcular</button>
+    </form>
+    <div id="result24" class="result"></div>
+    <div id="plot24" class="plot"></div>
+    <details><summary>Código Python usado</summary><pre><code>t = np.linspace(0, 2*np.pi, n+1)
+x = 2*b*np.cos(t) - b*np.cos(2*t)
+y = 2*b*np.sin(t) - b*np.sin(2*t)
+dx = -2*b*np.sin(t) + 2*b*np.sin(2*t)
+dy = 2*b*np.cos(t) - 2*b*np.cos(2*t)
+rapidez = np.sqrt(dx**2 + dy**2)
+L_trap = trapz(rapidez, h)
+L_simpson = simpson_combined(rapidez, h)
+L_exacta = 16*b</code></pre></details>
+  </section>
+
+  <!-- EJERCICIO 25 -->
+  <section id="ex25" class="exercise">
+    <h2>Ejercicio 25. Energía gravitatoria</h2>
+    <p class="statement">Estimar la variación de energía potencial de un satélite de 500 kg elevado a 800 km. No se asume \(mgh\) como exacta: se usa \(g(y)=g_0R^2/(R+y)^2\).</p>
+    <div class="formulas">
+      <p>\[\Delta U=m\int_0^h \frac{g_0R^2}{(R+y)^2}\,dy
+      =m g_0\frac{Rh}{R+h}\]</p>
+      <p>Comparación aproximada de gravedad constante: \(\Delta U_{\text{aprox}}=m g_0 h\).</p>
+    </div>
+    <form id="form25" class="controls">
+      <label>m (kg)<input id="ex25-m" type="number" value="500" step="any"></label>
+      <label>h (m)<input id="ex25-h" type="number" value="800000" step="any"></label>
+      <label>R (m)<input id="ex25-R" type="number" value="6371000" step="any"></label>
+      <label>g0 (m/s²)<input id="ex25-g0" type="number" value="9.81" step="any"></label>
+      <label>n<input id="ex25-n" type="number" value="8" min="2" step="1"></label>
+      <button type="submit">Calcular</button>
+    </form>
+    <div id="result25" class="result"></div>
+    <div id="plot25" class="plot"></div>
+    <details><summary>Código Python usado</summary><pre><code>y = np.linspace(0, h, n+1)
+g = g0 * R**2 / (R + y)**2
+integrando = g
+dU_trap = m * trapz(integrando, h)
+dU_simpson = m * simpson_combined(integrando, h)
+dU_exacta = m * g0 * R * h / (R + h)
+dU_constante = m * g0 * h</code></pre></details>
+  </section>
+
+  <!-- EJERCICIO 26 -->
+  <section id="ex26" class="exercise">
+    <h2>Ejercicio 26. Superficie de lago</h2>
+    <p class="statement">Estimar el área del lago Erie a partir de anchuras medidas. Los datos precargados de Erie son <strong>ilustrativos</strong> y están ajustados solo para demostrar el cálculo; no son mediciones oficiales. Reemplácelos por sus anchuras digitalizadas.</p>
+    <div class="formulas">
+      <p>\[A=\int_{x_0}^{x_n} w(x)\,dx\]</p>
+      <p>Si existe área de referencia \(A_{\text{ref}}\), \[E_a=|A_{\text{ref}}-A_{\text{aprox}}|,\qquad E\%=\frac{100E_a}{|A_{\text{ref}}|}.\]</p>
+    </div>
+    <h3>Lago Erie — datos de ejemplo editables</h3>
+    <form id="form26erie" class="controls">
+      <label>x (mi)
+        <textarea id="ex26erie-x">40,60,80,100,120,140,160,180,200,220,240,260</textarea>
+      </label>
+      <label>ancho w (mi)
+        <textarea id="ex26erie-w">8,20,40,55,65,66,63,65,55,40,20,8</textarea>
+      </label>
+      <label>Área de referencia (mi²)<input id="ex26erie-ref" type="number" value="9940" step="any"></label>
+      <button type="submit">Calcular Erie</button>
+    </form>
+    <div id="result26erie" class="result"></div>
+    <div id="plot26erie" class="plot"></div>
+
+    <h3>Adaptación al Titicaca — datos ilustrativos editables</h3>
+    <p class="note">Los anchos de esta adaptación son <strong>ilustrativos</strong> y no deben presentarse como mediciones oficiales. El valor de referencia usado es \(8372\ \text{km}^2\), área aproximada publicada del Titicaca. Reemplace la tabla por datos geográficos verificables si los dispone.</p>
+    <form id="form26titicaca" class="controls">
+      <label>x (km)
+        <textarea id="ex26titicaca-x">0,20,40,60,80,100,120,140,160,180,200</textarea>
+      </label>
+      <label>ancho w (km)
+        <textarea id="ex26titicaca-w">5,20,40,51.6,62,66.4,62,51.6,40,20,5</textarea>
+      </label>
+      <label>Área de referencia (km²)<input id="ex26titicaca-ref" type="number" value="8372" step="any"></label>
+      <button type="submit">Calcular Titicaca</button>
+    </form>
+    <div id="result26titicaca" class="result"></div>
+    <div id="plot26titicaca" class="plot"></div>
+
+    <details><summary>Código Python usado</summary><pre><code>A_trap = trapz(w, h)
+A_simpson = simpson_combined(w, h)
+error = abs(A_trap - A_ref)
+error_pct = 100*error/abs(A_ref)</code></pre></details>
+  </section>
+
+  <!-- EJERCICIO 27 -->
+  <section id="ex27" class="exercise">
+    <h2>Ejercicio 27. Geometría de un objeto alargado</h2>
+    <p class="statement">Con datos de diámetro a lo largo del eje, estimar el volumen y discutir la diferencia entre la fórmula simplificada y el área real de revolución.</p>
+    <div class="formulas">
+      <p>\[V=\pi\int_0^{12} r(z)^2\,dz,\qquad r(z)=\frac{d(z)}{2}\]</p>
+      <p>Superficie simplificada: \(S_{\text{simple}}=2\pi\int r\,dz\).</p>
+      <p>Superficie geométrica de revolución: \(S=2\pi\int r\sqrt{1+(r')^2}\,dz\).</p>
+    </div>
+    <form id="form27" class="controls">
+      <label>z (in)
+        <textarea id="ex27-z">0,1,2,3,4,5,6,7,8,9,10,11,12</textarea>
+      </label>
+      <label>d (in)
+        <textarea id="ex27-d">0,2.6,3.2,4.8,5.6,6.0,6.2,6.0,5.6,4.8,3.3,2.6,0</textarea>
+      </label>
+      <button type="submit">Calcular</button>
+    </form>
+    <div id="result27" class="result"></div>
+    <div id="plot27" class="plot"></div>
+    <details><summary>Código Python usado</summary><pre><code>r = d/2
+V_trap = np.pi * trapz(r**2, h)
+V_simpson = np.pi * simpson_combined(r**2, h)
+S_simple = 2*np.pi * trapz(r, h)
+dr = np.gradient(r, z)
+integrando_geom = 2*np.pi*r*np.sqrt(1 + dr**2)
+S_geom = trapz(integrando_geom, h)</code></pre></details>
+  </section>
+</main>
+
+<footer>
+  <p>Proyecto de Métodos Numéricos · La Paz, Bolivia · Interfaz académica funcional</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
